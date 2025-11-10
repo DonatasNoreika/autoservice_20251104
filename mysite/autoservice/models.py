@@ -43,6 +43,9 @@ class OrderLine(models.Model):
     service = models.ForeignKey(to="Service", on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.IntegerField()
 
+    def line_sum(self):
+        return self.service.price * self.quantity
+
     def __str__(self):
         return f"{self.service} - {self.quantity}"
 
