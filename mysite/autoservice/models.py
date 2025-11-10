@@ -31,6 +31,13 @@ class Order(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     car = models.ForeignKey(to="Car", on_delete=models.SET_NULL, null=True, blank=True)
 
+    def total(self):
+        result = 0
+        for line in self.lines.all():
+            result += line.line_sum()
+        return result
+
+
     def __str__(self):
         return f"{self.car} ({self.date})"
 
@@ -39,7 +46,7 @@ class Order(models.Model):
         verbose_name_plural = "Order"
 
 class OrderLine(models.Model):
-    order = models.ForeignKey(to="Order", on_delete=models.CASCADE)
+    order = models.ForeignKey(to="Order", on_delete=models.CASCADE, related_name='lines')
     service = models.ForeignKey(to="Service", on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.IntegerField()
 
