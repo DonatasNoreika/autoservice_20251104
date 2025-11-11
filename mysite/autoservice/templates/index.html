@@ -1,6 +1,11 @@
-<h1>Sveiki atvykę</h1>
-<p>Čia bus mano autoserviso programa, sukurta su Django Framework'u.</p>
+{% extends "base.html" %}
+
+{% block "title" %}PRADŽIA{% endblock %}
+
+{% block "content" %}
 <h3>Autoserviso statistika:</h3>
-<p>Registruotų automobilių: <b>{{ num_cars }}</b></p>
-<p>Teikiamų paslaugų: <b>{{ num_services }}</b></p>
-<p>Atliktų taisymų: <b>{{ num_orders_completed }}</b></p>
+<p><b>Registruotų automobilių: </b>{{ num_cars }}</p>
+<p><b>Teikiamų paslaugų: </b>{{ num_services }}</p>
+<p><b>Atliktų taisymų: </b>{{ num_orders_completed }}</p>
+
+{% endblock %}
