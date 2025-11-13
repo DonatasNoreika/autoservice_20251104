@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block "title" %}PRADŽIA{% endblock %}
+
+{% block "content" %}
+<h3>Paieškos pagal užklausą "{{ query }} rezultatai:"</h3>
+{% for car in cars %}
+<p><a href="{% url 'car' car.pk %}">{{ car }}</a></p>
+{% endfor %}
+{% endblock %}
