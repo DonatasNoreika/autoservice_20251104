@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -31,6 +32,7 @@ class Car(models.Model):
 class Order(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     car = models.ForeignKey(to="Car", on_delete=models.SET_NULL, null=True, blank=True)
+    client = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
     LOAN_STATUS = (
         ('c', "Confirmed"),
