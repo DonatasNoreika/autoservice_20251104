@@ -42,6 +42,7 @@ class Order(models.Model):
     )
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, default='c')
+    deadline = models.DateTimeField(null=True, blank=True)
 
     def total(self):
         result = 0
