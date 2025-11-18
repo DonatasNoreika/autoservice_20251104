@@ -4,6 +4,8 @@
 
 {% block "content" %}
 <p>Data: {{ order.date }}</p>
+<p>Terminas: {{ order.deadline }}</p>
+<p>Klientas: {{ order.client }}</p>
 <p>Automobilis: {{ order.car }}</p>
 <p>Būsena: {{ order.get_status_display }}</p>
 
