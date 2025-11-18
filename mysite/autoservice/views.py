@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from .models import Car, Service, Order
 from django.views import generic
@@ -57,3 +58,12 @@ def search(request):
         'cars': cars,
     }
     return render(request, template_name="search.html", context=context)
+
+
+class UserOrderListView(LoginRequiredMixin, generic.ListView):
+    model = Order
+    template_name = "user_orders.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return Order.objects.filter(client=self.request.user)
