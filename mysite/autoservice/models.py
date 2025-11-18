@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -50,6 +51,8 @@ class Order(models.Model):
             result += line.line_sum()
         return result
 
+    def is_overdue(self):
+        return self.deadline and self.deadline < timezone.now()
 
     def __str__(self):
         return f"{self.car} ({self.date})"
