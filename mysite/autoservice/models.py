@@ -76,3 +76,13 @@ class OrderLine(models.Model):
     class Meta:
         verbose_name = "Order line"
         verbose_name_plural = "Order lines"
+
+
+class OrderComment(models.Model):
+    order = models.ForeignKey(to="Order",
+                              on_delete=models.SET_NULL,
+                              null=True, blank=True,
+                             related_name="comments")
+    author = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+    date_created = models.DateTimeField(verbose_name="Date Created", auto_now_add=True)
+    content = models.TextField(verbose_name="Content")
