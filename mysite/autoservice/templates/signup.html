@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block "title" %}Sign Up{% endblock %}
+
+{% block "content" %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md">
+            <form method="post">
+                {% csrf_token %}
+                {% load crispy_forms_tags %}
+                {{ form | crispy }}
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+            </form>
+            <p><a href="{% url 'login' %}" class="btn btn-link w-100">Already Registered? Login</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
