@@ -5,9 +5,9 @@ from .models import Car, Service, Order, CustomUser
 from django.views import generic
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from .forms import OrderCommentForm
+from .forms import OrderCommentForm, CustomUserCreateForm
 
 def index(request):
     num_visits = request.session.get("num_visits", 1)
@@ -92,7 +92,7 @@ class UserOrderListView(LoginRequiredMixin, generic.ListView):
 
 
 class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
+    form_class = CustomUserCreateForm
     template_name = "signup.html"
     success_url = reverse_lazy("login")
 
