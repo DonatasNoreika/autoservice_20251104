@@ -2,6 +2,11 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db import models
 from tinymce.models import HTMLField
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    photo = models.ImageField(upload_to="profile_pics", null=True, blank=True)
+
 
 class Service(models.Model):
     name = models.CharField()
@@ -34,7 +39,7 @@ class Car(models.Model):
 class Order(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     car = models.ForeignKey(to="Car", on_delete=models.SET_NULL, null=True, blank=True)
-    client = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    client = models.ForeignKey(to='autoservice.CustomUser', on_delete=models.CASCADE)
 
     LOAN_STATUS = (
         ('c', "Confirmed"),
@@ -83,6 +88,6 @@ class OrderComment(models.Model):
                               on_delete=models.SET_NULL,
                               null=True, blank=True,
                              related_name="comments")
-    author = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+    author = models.ForeignKey(to='autoservice.CustomUser', on_delete=models.SET_NULL, null=True, blank=True)
     date_created = models.DateTimeField(verbose_name="Date Created", auto_now_add=True)
     content = models.TextField(verbose_name="Content")
