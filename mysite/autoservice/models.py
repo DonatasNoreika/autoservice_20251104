@@ -3,9 +3,24 @@ from django.contrib.auth.models import User
 from django.db import models
 from tinymce.models import HTMLField
 from django.contrib.auth.models import AbstractUser
+from PIL import Image
+
 
 class CustomUser(AbstractUser):
     photo = models.ImageField(upload_to="profile_pics", null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.photo:
+            img = Image.open(self.photo.path)
+            min_side = min(img.width, img.height)
+            left = (img.width - min_side) // 2
+            top = (img.height - min_side) // 2
+            right = left + min_side
+            bottom = top + min_side
+            img = img.crop((left, top, right, bottom))
+            img = img.resize((300, 300), Image.LANCZOS)
+            img.save(self.photo.path)
 
 
 class Service(models.Model):
@@ -18,6 +33,7 @@ class Service(models.Model):
     class Meta:
         verbose_name = "Service"
         verbose_name_plural = "Services"
+
 
 class Car(models.Model):
     make = models.CharField()
@@ -67,6 +83,7 @@ class Order(models.Model):
         verbose_name = "Order"
         verbose_name_plural = "Order"
 
+
 class OrderLine(models.Model):
     order = models.ForeignKey(to="Order", on_delete=models.CASCADE, related_name='lines')
     service = models.ForeignKey(to="Service", on_delete=models.SET_NULL, null=True, blank=True)
@@ -87,7 +104,7 @@ class OrderComment(models.Model):
     order = models.ForeignKey(to="Order",
                               on_delete=models.SET_NULL,
                               null=True, blank=True,
-                             related_name="comments")
+                              related_name="comments")
     author = models.ForeignKey(to='autoservice.CustomUser', on_delete=models.SET_NULL, null=True, blank=True)
     date_created = models.DateTimeField(verbose_name="Date Created", auto_now_add=True)
     content = models.TextField(verbose_name="Content")
