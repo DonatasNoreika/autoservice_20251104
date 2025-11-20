@@ -5,7 +5,12 @@
 {% block "content" %}
 <p>Data: {{ order.date }}</p>
 <p>Terminas: <span class="{% if order.is_overdue %}text-danger{% endif %}">{{ order.deadline }}</span></p>
-<p>Klientas: {{ order.client }}</p>
+<p>Klientas:
+    {% if order.client.photo %}
+    <img src="{{ order.client.photo.url }}" class="rounded-circle" style="width: 20px">
+    {% endif %}
+    {{ order.client }}
+</p>
 <p>Automobilis: {{ order.car }}</p>
 <p>Būsena: {{ order.get_status_display }}</p>
 
@@ -46,7 +51,12 @@
 <h2>Komentarai:</h2>
 <br/>
 {% for comment in order.comments.all %}
-<p><strong>{{ comment.author }}</strong>, <em>{{ comment.date_created }}</em></p>
+<p><strong>
+    {% if comment.author.photo %}
+    <img src="{{ comment.author.photo.url }}" class="rounded-circle" style="width: 30px">
+    {% endif %}
+    {{ comment.author }}</strong>, <em>{{ comment.date_created }}</em>
+</p>
 <p>{{ comment.content }}</p>
 <hr>
 {% empty %}
