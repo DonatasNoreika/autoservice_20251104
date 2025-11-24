@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from .forms import OrderCommentForm, CustomUserCreateForm
 
+
 def index(request):
     num_visits = request.session.get("num_visits", 1)
     request.session['num_visits'] = num_visits + 1
@@ -31,24 +32,12 @@ def cars(request):
     }
     return render(request, template_name="cars.html", context=context)
 
+
 def car(request, pk):
     context = {
         "car": Car.objects.get(pk=pk)
     }
     return render(request, template_name="car.html", context=context)
-
-
-class OrderListView(generic.ListView):
-    model = Order
-    template_name = "orders.html"
-    context_object_name = "orders"
-    paginate_by = 5
-
-class OrderDetailView(FormMixin, generic.DetailView):
-    model = Order
-    template_name = "order.html"
-    context_object_name = "order"
-    form_class = OrderCommentForm
 
     def get_success_url(self):
         return reverse("order", kwargs={"pk": self.object.id})
@@ -67,6 +56,7 @@ class OrderDetailView(FormMixin, generic.DetailView):
         form.save()
         return super().form_valid(form)
 
+
 def search(request):
     query = request.GET.get('query')
     cars = Car.objects.filter(Q(make__icontains=query) |
@@ -79,16 +69,6 @@ def search(request):
         'cars': cars,
     }
     return render(request, template_name="search.html", context=context)
-
-
-class UserOrderListView(LoginRequiredMixin, generic.ListView):
-    model = Order
-    template_name = "user_orders.html"
-    context_object_name = "orders"
-
-    def get_queryset(self):
-        return Order.objects.filter(client=self.request.user)
-
 
 
 class SignUpView(generic.CreateView):
@@ -105,3 +85,26 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class UserOrderListView(LoginRequiredMixin, generic.ListView):
+    model = Order
+    template_name = "user_orders.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return Order.objects.filter(client=self.request.user)
+
+
+class OrderListView(generic.ListView):
+    model = Order
+    template_name = "orders.html"
+    context_object_name = "orders"
+    paginate_by = 5
+
+
+class OrderDetailView(FormMixin, generic.DetailView):
+    model = Order
+    template_name = "order.html"
+    context_object_name = "order"
+    form_class = OrderCommentForm
