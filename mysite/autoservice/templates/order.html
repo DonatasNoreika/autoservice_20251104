@@ -21,8 +21,6 @@
 <div>
     <a class="btn btn-primary" href="{% url 'orderline_new' order.pk %}">Pridėti paslaugą</a>
 </div>
-
-
 {% endif %}
 
 <table class="table table-hover">
@@ -32,6 +30,9 @@
         <th>Kaina</th>
         <th>Kiekis</th>
         <th>Suma</th>
+          {% if order.client == user %}
+        <th></th>
+          {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -41,11 +42,22 @@
         <td>{{ line.service.price }}</td>
         <td>{{ line.quantity }}</td>
         <td>{{ line.line_sum }}</td>
+        {% if order.client == user %}
+        <td>
+            <div>
+                <a class="btn btn-warning" href="{% url 'orderline_edit' line.pk %}">Redaguoti</a>
+                <a class="btn btn-danger" href="{% url 'orderline_delete' line.pk %}">Trinti</a>
+            </div>
+        </td>
+        {% endif %}
       </tr>
     {% endfor %}
         <tr>
         <th colspan="3">BENDRA SUMA</th>
         <th>{{ order.total }}</th>
+        {% if order.client == user %}
+            <td></td>
+        {% endif %}
       </tr>
     </tbody>
   </table>
