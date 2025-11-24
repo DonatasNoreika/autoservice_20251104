@@ -7,7 +7,9 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 # from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from .forms import OrderCommentForm, CustomUserCreateForm
+from .forms import (OrderCommentForm,
+                    CustomUserCreateForm,
+                    OrderCreateForm)
 
 
 def index(request):
@@ -38,23 +40,6 @@ def car(request, pk):
         "car": Car.objects.get(pk=pk)
     }
     return render(request, template_name="car.html", context=context)
-
-    def get_success_url(self):
-        return reverse("order", kwargs={"pk": self.object.id})
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        form.instance.order = self.get_object()
-        form.instance.author = self.request.user
-        form.save()
-        return super().form_valid(form)
 
 
 def search(request):
@@ -108,3 +93,32 @@ class OrderDetailView(FormMixin, generic.DetailView):
     template_name = "order.html"
     context_object_name = "order"
     form_class = OrderCommentForm
+
+    def get_success_url(self):
+        return reverse("order", kwargs={"pk": self.object.id})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.order = self.get_object()
+        form.instance.author = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+class OrderCreateView(LoginRequiredMixin, generic.CreateView):
+    form_class = OrderCreateForm
+    template_name = "order_form.html"
+    success_url = reverse_lazy('user_orders')
+
+    def form_valid(self, form):
+        form.instance.client = self.request.user
+        form.save()
+        return super().form_valid(form)
+

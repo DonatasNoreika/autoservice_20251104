@@ -3,7 +3,9 @@
 {% block "title" %}Mano Taisymai{% endblock %}
 
 {% block "content" %}
-
+<div class="mb-2">
+    <a class="btn btn-primary" href="{% url 'orders_new' %}">Naujas taisymas</a>
+</div>
 {% for order in orders %}
 <p>
     <a href="{% url 'order' order.pk %}">
