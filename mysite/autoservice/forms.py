@@ -19,3 +19,10 @@ class OrderCreateForm(forms.ModelForm):
         model = Order
         fields = ['car', 'deadline']
         widgets = {'deadline': forms.DateInput(attrs={'type': 'datetime-local'})}
+
+
+class OrderUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['car', 'deadline', 'status']
+        widgets = {'deadline': forms.DateInput(attrs={'type': 'datetime-local'})}
